@@ -32,11 +32,7 @@ export function useLeaveConfirmation(orderId) {
                 });
                 localStorage.removeItem("currentOrderId");
                 console.log("Order auto-cleared after inactivity");
-                if (leaveSource === "navbar") {
-                    navigate("/", { replace: true });
-                } else {
-                    navigate("/menu", { replace: true });
-                }
+                navigate("/", { replace: true });
             } catch (err) {
                 console.error("Auto-clear failed:", err);
             }
@@ -150,17 +146,6 @@ export function useLeaveConfirmation(orderId) {
                         You haven’t interacted for a while. Your current order will be
                         cleared automatically soon if you don’t do anything.
                     </p>
-                    <div className="flex justify-center space-x-4">
-                        <button
-                            onClick={() => {
-                                setShowInactivity(false);
-                                startTimer(); // restart timer manually
-                            }}
-                            className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-                        >
-                            I’m Still Here
-                        </button>
-                    </div>
                 </Dialog.Panel>
             </div>
         </Dialog>

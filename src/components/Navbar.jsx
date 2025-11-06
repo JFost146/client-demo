@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLeaveConfirmation } from "../hooks/useLeaveConfirmation";
+/*import { ReactComponent as logo } from '../assets/logo.pdf';
+<img src={logo} alt="Botler Logo" className="h-8 w-8 mr-2" />*/
 
 function Navbar() {
   const navigate = useNavigate();
