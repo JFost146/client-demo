@@ -64,6 +64,9 @@ function TableSelectPage() {
               try {
                 const order = await getOrCreateOrder(table._id, menuId);
                 localStorage.setItem("currentOrderId", order._id);
+                window.dispatchEvent(new Event("storage"));
+                //pause for bug fix
+                await new Promise((resolve) => setTimeout(resolve, 100));
                 navigate(`/menu/${menuId}/table/${table._id}`);
               } catch (err) {
                 alert("Error creating order: " + err.message);
