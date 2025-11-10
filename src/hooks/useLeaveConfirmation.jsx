@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { Dialog } from "@headlessui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function useLeaveConfirmation(orderId) {
 const navigate = useNavigate();
+const location = useLocation();
 const [showConfirm, setShowConfirm] = useState(false);
 const [showInactivity, setShowInactivity] = useState(false);
 const [leaveSource, setLeaveSource] = useState("default");
@@ -13,6 +14,7 @@ const inactivityTimer = useRef(null);
 const warningTimer = useRef(null);
 
 //fix issue where leave confirmation only works on website refresh
+// (React Router v7 no longer supports unstable_useBlocker; using popstate fallback)
 useEffect(() => {
     if (!orderId) return;
 
@@ -21,10 +23,23 @@ useEffect(() => {
 
     const handlePopState = (e) => {
         e.preventDefault();
-        setLeaveSource("back");
-        setShowConfirm(true);
-        // re-lock the history so further presses still trigger our modal
-        window.history.pushState(null, "", window.location.href);
+
+        // only trigger confirmation when on /menu/:id/table/:id
+        const pathParts = location.pathname.split("/").filter(Boolean);
+        const isOrderPage =
+            pathParts.length === 4 &&
+            pathParts[0] === "menu" &&
+            pathParts[2] === "table";
+
+        if (isOrderPage) {
+            setLeaveSource("back");
+            setShowConfirm(true);
+            window.history.pushState(null, "", window.location.href);
+        } else {
+            // allow normal back behavior elsewhere
+            window.removeEventListener("popstate", handlePopState);
+            history.back();
+        }
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -32,7 +47,7 @@ useEffect(() => {
     return () => {
         window.removeEventListener("popstate", handlePopState);
     };
-}, [orderId]);
+}, [orderId, location.pathname]);
 
 // reusable timer starter
 const startTimer = () => {
@@ -178,8 +193,20 @@ const InactivityModal = () => (
 
 const RequestLeave = (source = "default") => {
     if (!orderId) return;
-    setLeaveSource(source);
-    setShowConfirm(true);
+
+    // only trigger confirmation if not in "/", "/menu", or "/menu/:id"
+    const path = location.pathname;
+    const isSafePage =
+        path === "/" ||
+        path === "/menu" ||
+        /^\/menu\/[^/]+$/.test(path); // matches "/menu/:id"
+
+    if (!isSafePage) {
+        setLeaveSource(source);
+        setShowConfirm(true);
+    } else {
+        navigate("/", { replace: true });
+    }
 };
 
 
