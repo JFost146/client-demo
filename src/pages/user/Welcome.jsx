@@ -7,11 +7,11 @@ function WelcomePage() {
 
   const handleStart = async () => {
     try {
-      if (ready) {
+      //if (ready) {
         await speakAsync(
           "Welcome to Nostos. I am Botler. Please use this touchscreen to order your meal."
         );
-      }
+      //}
     } catch (err) {
       console.warn("TTS failed:", err);
     }
