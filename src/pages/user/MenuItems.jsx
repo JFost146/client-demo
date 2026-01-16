@@ -3,7 +3,6 @@ import { Dialog } from "@headlessui/react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { updateOrderItems } from "../../utils/api";
 import { useTTS } from "../../hooks/useTTS";
-import { useLocation } from "react-router-dom";
 
 function MenuItemsPage() {
   const { RequestLeave } = useOutletContext();
@@ -16,22 +15,25 @@ function MenuItemsPage() {
   const [order, setOrder] = useState([]);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [orderId, setOrderId] = useState(null);
-  const { speak } = useTTS({ lang: "en-GB", rate: 1.1 });
-  const location = useLocation();
+  const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
 
   useEffect(() => {
     const storedId = localStorage.getItem("currentOrderId");
     if (storedId) setOrderId(storedId);
   }, []);
 
-  //useEffect(() => {
-    //const shouldPlay = localStorage.getItem("playTableSelectVoice") === "1";
+  useEffect(() => {
+    const run = async() =>{
+      const shouldPlay = localStorage.getItem("playTableSelectVoice") === "1";
 
-   // if (shouldPlay) {
-     // localStorage.removeItem("playTableSelectVoice");
-      //speak("Please select from our starters: Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened our Greek House lager, Mythos?");
-   // }
-  //}, [speak]);
+      if (shouldPlay && ready) {
+        localStorage.removeItem("playTableSelectVoice");
+        await speakAsync("Please select from our starters: Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened our Greek House lager, Mythos?");
+      }
+    };
+    run();
+
+  }, [speakAsync]);
 
   useEffect(() => {
     async function loadExistingOrder() {
