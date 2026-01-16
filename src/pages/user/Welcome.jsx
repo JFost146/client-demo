@@ -3,6 +3,20 @@ import { useNavigate } from "react-router-dom";
 function WelcomePage() {
   const nav = useNavigate();
 
+  const handleStart = async () => {
+    try {
+      if (ready) {
+        await speakAsync(
+          "Welcome to Nostos. I am Botler. Please use this touchscreen to order your meal."
+        );
+      }
+    } catch (err) {
+      console.warn("TTS failed:", err);
+    }
+
+    nav("/menu");
+  };
+
   return (
     <div className="flex flex-col justify-center h-screen bg-blue-50 text-gray-900 px-6 font-inter">
       <div className="max-w-xl">
@@ -13,7 +27,7 @@ function WelcomePage() {
           I am Botler! Please use this Screen to Order your Meal.
         </p>
         <button
-          onClick={() => nav("/menu")}
+          onClick={handleStart}
           className="bg-blue-600 text-white px-10 py-4 rounded-2xl font-semibold text-lg hover:bg-blue-700 transition"
         >
           Start
