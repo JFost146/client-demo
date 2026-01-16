@@ -162,7 +162,10 @@ function CheckoutSummaryPage() {
 
                 <div className="flex justify-end mt-8">
                     <button
-                        onClick={handlePlaceOrder}
+                        onClick={async () => {
+                            localStorage.setItem("playThankYouVoice", "1");
+                            await handlePlaceOrder();
+                        }}
                         className="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 text-lg font-semibold"
                     >
                         Place Order

@@ -28,7 +28,7 @@ function MenuItemsPage() {
 
       if (shouldPlay && ready) {
         localStorage.removeItem("playTableSelectVoice");
-        await speakAsync("Please select from our starters: Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened our Greek House lager, Mythos?");
+        await speakAsync("Please select from our starters. Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened, our Greek House lager, Mythos?");
       }
     };
     run();

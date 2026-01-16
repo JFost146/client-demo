@@ -1,15 +1,30 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTTS } from "../../hooks/useTTS";
 
 export default function ThankYou() {
   const nav = useNavigate();
+  const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
 
   useEffect(() => {
     const t = setTimeout(() => {
       nav("/", { replace: true });
-    }, 3500);
+    }, 7000);
     return () => clearTimeout(t);
   }, [nav]);
+
+  useEffect(() => {
+    const run = async() =>{
+      const shouldPlay = localStorage.getItem("playThankYouVoice") === "1";
+
+      if (shouldPlay && ready) {
+        localStorage.removeItem("playThankYouVoice");
+        await speakAsync("Thank you. I will return with your order shortly!");
+      }
+    };
+    run();
+
+  }, [ready, speakAsync]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-50 px-6 font-inter text-gray-900">
