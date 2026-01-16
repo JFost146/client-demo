@@ -3,7 +3,7 @@ import { useTTS } from "../../hooks/useTTS";
 
 function WelcomePage() {
   const nav = useNavigate();
-  const { ready, speakAsync } = useTTS({ lang: "fr-FR", rate: 1.0 });
+  const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.0 });
 
   const handleStart = async () => {
     try {

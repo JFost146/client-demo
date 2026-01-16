@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getOrCreateOrder } from "../../utils/api";
+import { useTTS } from "../../hooks/useTTS";
 
 function TableSelectPage() {
   const { menuId } = useParams();
@@ -8,6 +9,7 @@ function TableSelectPage() {
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
 
   useEffect(() => {
     async function fetchTables() {
@@ -67,6 +69,8 @@ function TableSelectPage() {
                 const order = await getOrCreateOrder(table._id, menuId);
                 localStorage.setItem("currentOrderId", order._id);
                 window.dispatchEvent(new Event("storage"));
+
+                await speakAsync("Please selectr from our starters: Appetizers and small bites to begin your meal... Our Traditional and modern Greek main dishes... And can i reccomend our Greek House draft lager, Mythos ");
 
                 await new Promise((resolve) => setTimeout(resolve, 100));
                 navigate(`/menu/${menuId}/table/${table._id}`);
