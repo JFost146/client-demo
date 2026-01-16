@@ -65,12 +65,11 @@ function TableSelectPage() {
             onClick={async () => {
               try {
                 localStorage.setItem("currentTableId", table._id);
+                localStorage.setItem("playTableSelectVoice", "1");
 
                 const order = await getOrCreateOrder(table._id, menuId);
                 localStorage.setItem("currentOrderId", order._id);
                 window.dispatchEvent(new Event("storage"));
-
-                await speakAsync("Please selectr from our starters: Appetizers and small bites to begin your meal... Our Traditional and modern Greek main dishes... And can i reccomend our Greek House draft lager, Mythos ");
 
                 await new Promise((resolve) => setTimeout(resolve, 100));
                 navigate(`/menu/${menuId}/table/${table._id}`);

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { updateOrderItems } from "../../utils/api";
+import { useTTS } from "../../hooks/useTTS";
+import { useLocation } from "react-router-dom";
 
 function MenuItemsPage() {
   const { RequestLeave } = useOutletContext();
@@ -14,13 +16,23 @@ function MenuItemsPage() {
   const [order, setOrder] = useState([]);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [orderId, setOrderId] = useState(null);
+  const { speak } = useTTS({ lang: "en-GB", rate: 1.1 });
+  const location = useLocation();
 
   useEffect(() => {
     const storedId = localStorage.getItem("currentOrderId");
     if (storedId) setOrderId(storedId);
   }, []);
 
-  // ✅ FIX: hydrate existing order items when returning from checkout
+  //useEffect(() => {
+    //const shouldPlay = localStorage.getItem("playTableSelectVoice") === "1";
+
+   // if (shouldPlay) {
+     // localStorage.removeItem("playTableSelectVoice");
+      //speak("Please select from our starters: Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened our Greek House lager, Mythos?");
+   // }
+  //}, [speak]);
+
   useEffect(() => {
     async function loadExistingOrder() {
       if (!orderId) return;
