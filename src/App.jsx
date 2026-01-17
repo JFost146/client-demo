@@ -44,7 +44,7 @@ const App = () => {
       <LeaveModal />
       <InactivityModal />
 
-      <div className="p-6">
+      <div className="p-6 min-h-full">
         <Outlet context={{ RequestLeave }} />
       </div>
     </div>
