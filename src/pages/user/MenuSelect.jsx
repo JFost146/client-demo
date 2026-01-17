@@ -38,7 +38,7 @@ function MenuPage() {
     );
 
   return (
-    <div className="select-none bg-blue-50 py-10 px-6 font-inter text-gray-900">
+    <div className="select-none min-h-full bg-blue-50 py-10 px-6 font-inter text-gray-900">
       <h1 className="text-4xl md:text-5xl font-bold text-blue-700 mb-10">
         Select a Menu
       </h1>

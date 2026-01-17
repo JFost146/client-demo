@@ -278,6 +278,15 @@ function MenuItemsPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           {selectedItem && (
             <Dialog.Panel className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-8 shadow-lg text-center">
+              {selectedItem.picture && (
+                <div className="mb-5 w-full h-56 overflow-hidden rounded-xl">
+                  <img
+                    src={selectedItem.picture}
+                    alt={selectedItem.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <Dialog.Title className="text-2xl font-semibold mb-4">
                 {selectedItem.name}
               </Dialog.Title>

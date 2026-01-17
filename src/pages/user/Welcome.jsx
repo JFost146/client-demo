@@ -30,7 +30,7 @@ function WelcomePage() {
   };
 
   return (
-    <div className="flex flex-col select-none items-center justify-center bg-blue-50 px-6 py-10 font-inter text-gray-900 text-center">
+    <div className="flex flex-col select-none min-h-full items-center justify-center bg-blue-50 px-6 py-10 font-inter text-gray-900 text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-6 text-blue-700">
         Welcome to Nostos
       </h1>
