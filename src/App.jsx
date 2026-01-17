@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 
 const App = () => {
   const [orderId, setOrderId] = useState(localStorage.getItem("currentOrderId"));
-  const scrollRef = useDragScroll(false);
+  const scrollRef = useDragScroll(true);
 
   useEffect(() => {
     const updateOrderId = () => {
