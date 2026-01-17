@@ -36,7 +36,7 @@ function WelcomePage() {
       </h1>
 
       <p className="text-lg mb-10 text-center max-w-md text-gray-600">
-        I am Botler! Please use this Screen to Order your Meal.
+        I am Botler! Please use this screen to order your meal when ready.
       </p>
 
       <button
