@@ -65,7 +65,7 @@ export default function ThankYou() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-50 px-6 font-inter text-gray-900">
+    <div className="select-none flex items-center justify-center bg-blue-50 px-6 font-inter text-gray-900">
       <div className="bg-white p-10 rounded-2xl shadow-sm border border-blue-100 max-w-md w-full">
         <h1 className="text-3xl md:text-4xl font-bold mb-4 text-blue-700">
           Thank you!

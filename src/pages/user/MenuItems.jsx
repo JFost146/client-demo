@@ -157,14 +157,14 @@ function MenuItemsPage() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center h-screen text-xl font-inter text-center">
+      <div className="flex items-center justify-center select-none py-20 text-xl font-inter text-center">
         Loading menu items...
       </div>
     );
 
   if (error)
     return (
-      <div className="flex items-center justify-center h-screen text-red-600 text-xl font-inter text-center">
+      <div className="flex items-center justify-center select-none py-20 text-red-600 text-xl font-inter text-center">
         Error: {error}
       </div>
     );
@@ -172,7 +172,7 @@ function MenuItemsPage() {
   if (!menu) return <p className="mt-10 font-inter text-center">No menu found</p>;
 
   return (
-    <div className="min-h-screen bg-blue-50 py-10 px-6 font-inter text-gray-900 text-center">
+    <div className="select-none bg-blue-50 py-10 px-6 font-inter text-gray-900 text-center">
       <button
         onClick={() => {
           if (subId) {
@@ -232,7 +232,7 @@ function MenuItemsPage() {
                     `/menu/${menu._id}/table/${menu.tableId || tableId || "none"}/sub/${sub._id}`
                   )
                 }
-                className="cursor-pointer bg-white rounded-2xl overflow-hidden border border-blue-100 shadow-sm hover:shadow-md transition"
+                className="cursor-pointer select-none bg-white rounded-2xl overflow-hidden border border-blue-100 shadow-sm hover:shadow-md transition"
               >
                 {sub.picture && (
                   <div className="h-56 w-full overflow-hidden">
@@ -277,7 +277,7 @@ function MenuItemsPage() {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           {selectedItem && (
-            <Dialog.Panel className="w-full max-w-lg rounded-2xl bg-white p-8 shadow-lg text-center">
+            <Dialog.Panel className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-8 shadow-lg text-center">
               <Dialog.Title className="text-2xl font-semibold mb-4">
                 {selectedItem.name}
               </Dialog.Title>
@@ -323,7 +323,7 @@ function SubcategorySection({ sub, onSelectItem, tableId, menuId }) {
             <div
               key={item._id}
               onClick={() => onSelectItem(item)}
-              className="cursor-pointer bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition"
+              className="cursor-pointer select-none bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition"
             >
               {item.picture ? (
                 <div className="h-48 w-full overflow-hidden">
@@ -363,7 +363,7 @@ function SubcategorySection({ sub, onSelectItem, tableId, menuId }) {
               onClick={() =>
                 navigate(`/menu/${menuId}/table/${tableId || "none"}/sub/${child._id}`)
               }
-              className="cursor-pointer bg-white rounded-2xl overflow-hidden border border-blue-100 shadow-sm hover:shadow-md transition"
+              className="cursor-pointer select-none bg-white rounded-2xl overflow-hidden border border-blue-100 shadow-sm hover:shadow-md transition"
             >
               {child.picture ? (
                 <div className="h-48 w-full overflow-hidden">

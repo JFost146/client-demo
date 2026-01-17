@@ -33,20 +33,20 @@ function TableSelectPage() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center h-screen text-xl font-inter text-center">
+      <div className="flex items-center justify-center py-20 text-xl font-inter text-center">
         Loading tables...
       </div>
     );
 
   if (error)
     return (
-      <div className="flex items-center justify-center h-screen text-red-600 text-xl font-inter text-center">
+      <div className="flex items-center justify-center py-20 text-red-600 text-xl font-inter text-center">
         Error: {error}
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-blue-50 py-10 px-6 font-inter text-gray-900 text-center">
+    <div className="select-none bg-blue-50 py-10 px-6 font-inter text-gray-900 text-center">
       <button
         onClick={() => navigate(-1)}
         className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 mb-6 text-lg self-start text-left block"
@@ -77,9 +77,9 @@ function TableSelectPage() {
                 alert("Error creating order: " + err.message);
               }
             }}
-            className={`cursor-pointer border rounded-2xl p-6 shadow-sm transition ${table.isOccupied
-                ? "bg-gray-200 text-gray-500 border-gray-300"
-                : "bg-white border-blue-100 hover:shadow-md"
+            className={`cursor-pointer select-none border rounded-2xl p-6 shadow-sm transition ${table.isOccupied
+              ? "bg-gray-200 text-gray-500 border-gray-300"
+              : "bg-white border-blue-100 hover:shadow-md"
               }`}
           >
             <h2 className="text-2xl font-semibold mb-3 text-blue-700">
