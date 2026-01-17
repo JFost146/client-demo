@@ -1,10 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTTS } from "../../hooks/useTTS";
+//import { useTTS } from "../../hooks/useTTS";
 
 export default function ThankYou() {
   const nav = useNavigate();
-  const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
+  //const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
+  const audioRef = useRef(null);
+
+
+  useEffect(() => {
+    audioRef.current = new Audio("/audio/thankyou.mp3");
+    audioRef.current.preload = "auto";
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -13,18 +20,49 @@ export default function ThankYou() {
     return () => clearTimeout(t);
   }, [nav]);
 
-  useEffect(() => {
-    const run = async() =>{
-      const shouldPlay = localStorage.getItem("playThankYouVoice") === "1";
+  /*  useEffect(() => {
+      const run = async() =>{
+        const shouldPlay = localStorage.getItem("playThankYouVoice") === "1";
+  
+        if (shouldPlay && ready) {
+          localStorage.removeItem("playThankYouVoice");
+          await speakAsync("Thank you. I will return with your order shortly!");
+        }
+      };
+      run();
+  
+    }, [ready, speakAsync]);
+  
+    Legacy code for using web TTS to announce voicelines, replaced by mp3
+  
+    */
 
-      if (shouldPlay && ready) {
-        localStorage.removeItem("playThankYouVoice");
-        await speakAsync("Thank you. I will return with your order shortly!");
+
+  useEffect(() => {
+    const run = async () => {
+      const shouldPlay = localStorage.getItem("playThankYouVoice") === "1";
+      if (!shouldPlay) return;
+
+      localStorage.removeItem("playThankYouVoice");
+
+      try {
+        const audio = audioRef.current;
+        if (!audio) throw new Error("Audio not initialized");
+
+        audio.currentTime = 0;
+        await audio.play();
+
+        await new Promise((resolve) => {
+          audio.onended = resolve;
+          audio.onerror = resolve;
+        });
+      } catch (err) {
+        console.warn("Audio play failed:", err);
       }
     };
-    run();
 
-  }, [ready, speakAsync]);
+    run();
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-50 px-6 font-inter text-gray-900">

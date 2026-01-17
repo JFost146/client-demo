@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { updateOrderItems } from "../../utils/api";
-import { useTTS } from "../../hooks/useTTS";
+//import { useTTS } from "../../hooks/useTTS";
 
 function MenuItemsPage() {
   const { RequestLeave } = useOutletContext();
@@ -15,7 +15,9 @@ function MenuItemsPage() {
   const [order, setOrder] = useState([]);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [orderId, setOrderId] = useState(null);
-  const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
+  //const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
+
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const storedId = localStorage.getItem("currentOrderId");
@@ -23,17 +25,51 @@ function MenuItemsPage() {
   }, []);
 
   useEffect(() => {
-    const run = async() =>{
+    audioRef.current = new Audio("/audio/menu.mp3");
+    audioRef.current.preload = "auto";
+  }, []);
+
+  /*  useEffect(() => {
+      const run = async() =>{
+        const shouldPlay = localStorage.getItem("playTableSelectVoice") === "1";
+  
+        if (shouldPlay && ready) {
+          localStorage.removeItem("playTableSelectVoice");
+          await speakAsync("Please select from our starters. Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened, our Greek House lager, Mythos?");
+        }
+      };
+      run();
+  
+    }, [speakAsync]); 
+    
+    Note: This is old code which uses browser TTS for speech
+    */
+
+  useEffect(() => {
+    const run = async () => {
       const shouldPlay = localStorage.getItem("playTableSelectVoice") === "1";
 
-      if (shouldPlay && ready) {
-        localStorage.removeItem("playTableSelectVoice");
-        await speakAsync("Please select from our starters. Appetizers and small bites to begin your meal. And our Traditional and modern Greek main dishes... May I also reccomened, our Greek House lager, Mythos?");
+      if (!shouldPlay) return;
+
+      localStorage.removeItem("playTableSelectVoice");
+
+      try {
+        const audio = audioRef.current;
+        if (!audio) throw new Error("Audio not initialized");
+
+        audio.currentTime = 0;
+        await audio.play();
+
+        await new Promise((resolve) => {
+          audio.onended = resolve;
+          audio.onerror = resolve;
+        });
+      } catch (err) {
+        console.warn("Audio play failed:", err);
       }
     };
     run();
-
-  }, [speakAsync]);
+  }, []);
 
   useEffect(() => {
     async function loadExistingOrder() {
