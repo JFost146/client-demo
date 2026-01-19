@@ -319,3 +319,183 @@ function MenuItemsPage() {
     </div>
   );
 }
+
+function SubcategorySection({ sub, onSelectItem, tableId, menuId }) {
+  const navigate = useNavigate();
+
+  return (
+    <div className="bg-white rounded-xl p-6 border border-blue-100 shadow-sm text-center">
+      <h2 className="text-2xl font-semibold mb-2 text-blue-700">{sub.name}</h2>
+      <p className="text-gray-700 mb-4 text-lg">{sub.description}</p>
+
+      {sub.items && sub.items.length > 0 && (
+        <div className="grid md:grid-cols-2 gap-6">
+          {sub.items.map((item) => (
+            <div
+              key={item._id}
+              onClick={() => onSelectItem(item)}
+              className="cursor-pointer select-none bg-white border border-blue-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition"
+            >
+              {item.picture ? (
+                <div className="h-48 w-full overflow-hidden">
+                  <img
+                    src={item.picture}
+                    alt={item.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              ) : (
+                <div className="h-48 bg-blue-50 flex items-center justify-center text-gray-500">
+                  No Image
+                </div>
+              )}
+
+              <div className="p-5">
+                <h3 className="text-xl font-semibold text-blue-700 mb-1">
+                  {item.name}
+                </h3>
+                <p className="text-gray-700 mb-2 line-clamp-2 text-lg">
+                  {item.description}
+                </p>
+                <p className="font-semibold text-blue-700 text-lg">
+                  £{item.price?.toFixed(2)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {sub.children && sub.children.length > 0 && (
+        <div className="mt-8 grid md:grid-cols-2 gap-6">
+          {sub.children.map((child) => (
+            <div
+              key={child._id}
+              onClick={() =>
+                navigate(`/menu/${menuId}/table/${tableId || "none"}/sub/${child._id}`)
+              }
+              className="cursor-pointer select-none bg-white rounded-2xl overflow-hidden border border-blue-100 shadow-sm hover:shadow-md transition"
+            >
+              {child.picture ? (
+                <div className="h-48 w-full overflow-hidden">
+                  <img
+                    src={child.picture}
+                    alt={child.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              ) : (
+                <div className="h-48 bg-blue-50 flex items-center justify-center text-gray-500">
+                  No Image
+                </div>
+              )}
+
+              <div className="p-5">
+                <h4 className="text-xl font-semibold text-blue-700 mb-2">
+                  {child.name}
+                </h4>
+                <p className="text-gray-700 line-clamp-2 text-lg">
+                  {child.description}
+                </p>
+                <button className="mt-4 bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold text-lg hover:bg-blue-700">
+                  View {child.name}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function IngredientSelector({ ingredients, onConfirm, onCancel }) {
+  const [removed, setRemoved] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [special, setSpecial] = useState("");
+
+  const toggleRemove = (id) => {
+    setRemoved((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleConfirm = () => {
+    onConfirm({
+      removedIngredients: removed,
+      quantity,
+      specialInstructions: special,
+    });
+  };
+
+  return (
+    <main className="text-center">
+      <h3 className="font-semibold mb-3 text-lg">Tick to Remove Ingredient:</h3>
+      <ul className="space-y-3 mb-6">
+        {ingredients.length > 0 ? (
+          ingredients.map((ing) => (
+            <li key={ing._id}>
+              <label className="flex items-center justify-center space-x-3 text-lg">
+                <input
+                  type="checkbox"
+                  checked={removed.includes(ing._id)}
+                  onChange={() => toggleRemove(ing._id)}
+                  className="w-5 h-5"
+                />
+                <span
+                  className={
+                    removed.includes(ing._id)
+                      ? "line-through text-gray-400"
+                      : "text-gray-800"
+                  }
+                >
+                  {ing.name}
+                </span>
+              </label>
+            </li>
+          ))
+        ) : (
+          <li className="text-gray-500"></li>
+        )}
+      </ul>
+
+      <label className="block mb-4 text-lg">
+        <span className="font-semibold">Quantity:</span>
+        <input
+          type="number"
+          min="1"
+          value={quantity}
+          onChange={(e) => setQuantity(Number(e.target.value))}
+          className="border border-gray-300 rounded-lg px-3 py-2 ml-3 w-24 text-lg"
+        />
+      </label>
+
+      <label className="block mb-4 text-lg">
+        <span className="font-semibold">Special Instructions:</span>
+        <textarea
+          value={special}
+          onChange={(e) => setSpecial(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg p-3 mt-2 text-lg"
+          placeholder="e.g. No sauce, extra cheese"
+        />
+      </label>
+
+      <div className="flex justify-center space-x-4 mt-6">
+        <button
+          onClick={onCancel}
+          className="px-5 py-3 bg-gray-200 rounded-xl hover:bg-gray-300 text-lg"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleConfirm}
+          className="px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg"
+        >
+          Add to Order
+        </button>
+      </div>
+    </main>
+  );
+}
+
+export default MenuItemsPage;
