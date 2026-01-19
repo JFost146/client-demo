@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { updateOrderItems } from "../../utils/api";
+import { useDragScroll } from "../../hooks/useDragScroll";
 //import { useTTS } from "../../hooks/useTTS";
 
 function MenuItemsPage() {
@@ -18,6 +19,7 @@ function MenuItemsPage() {
   //const { ready, speakAsync } = useTTS({ lang: "en-GB", rate: 1.1 });
 
   const audioRef = useRef(null);
+  const modalScrollRef = useDragScroll(!!selectedItem);
 
   useEffect(() => {
     const storedId = localStorage.getItem("currentOrderId");
@@ -277,7 +279,7 @@ function MenuItemsPage() {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           {selectedItem && (
-            <Dialog.Panel className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-8 shadow-lg text-center">
+            <Dialog.Panel ref={modalScrollRef} className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-8 shadow-lg text-center">
               {selectedItem.picture && (
                 <div className="mb-5 w-full h-56 overflow-hidden rounded-xl">
                   <img
