@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function useDragScroll(enabled = true) {
+export function useDragScroll(enabled = true, options = {}) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -16,11 +16,16 @@ export function useDragScroll(enabled = true) {
 
     const THRESHOLD = 10;
 
+    const { allowLabelDrag = false } = options;
+
     const isInteractive = (target) => {
       if (!target) return false;
-      return !!target.closest(
-        "button, a, input, textarea, select, label, [role='button'], [data-no-drag]"
-      );
+
+      const selector = allowLabelDrag
+        ? "button, a, input, textarea, select, [role='button'], [data-no-drag]"
+        : "button, a, input, textarea, select, label, [role='button'], [data-no-drag]";
+
+      return !!target.closest(selector);
     };
 
     const onPointerDown = (e) => {
@@ -67,7 +72,7 @@ export function useDragScroll(enabled = true) {
       window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointercancel", onPointerUp);
     };
-  }, [enabled]);
+  }, [enabled, options]);
 
   return ref;
 }
